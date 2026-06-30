@@ -37,18 +37,18 @@ export default function About() {
     <section id="about" className="py-24 bg-slate-950 text-white relative">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
+
           {/* Left Block: Narrative introduction */}
           <div className="lg:col-span-5 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 text-xs font-mono">
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
               <span>Về Tôi</span>
             </div>
-            
+
             <h2 className="text-3xl md:text-4xl font-display font-bold leading-tight">
               Mục tiêu phát triển sự nghiệp
             </h2>
-            
+
             <p className="text-slate-400 leading-relaxed text-base font-sans">
               Tôi là sinh viên năm cuối đầy nhiệt huyết chuyên ngành Công nghệ thông tin tại HaUI. Với mong muốn trở thành một <strong className="text-emerald-400 font-semibold">Kỹ sư phần mềm backend/full-stack</strong> thực thụ, tôi luôn tập trung vào việc viết mã nguồn sạch, tối ưu hiệu năng hệ thống và thiết kế kiến trúc bền vững.
             </p>
@@ -75,7 +75,7 @@ export default function About() {
             <h3 className="text-xl font-display font-semibold text-slate-200 mb-2 flex items-center gap-2">
               <span>Tư Duy & Kỷ Luật Bản Thân</span>
             </h3>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {hobbies.map((hobby, index) => (
                 <motion.div
