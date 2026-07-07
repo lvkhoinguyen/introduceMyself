@@ -21,7 +21,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name || !formData.email || !formData.message) {
       setStatus({
         type: "error",
@@ -69,9 +69,9 @@ export default function Contact() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 max-w-5xl relative z-10">
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* Left Column: Contact info & Socials */}
           <div className="lg:col-span-5 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 text-xs font-mono">
@@ -79,10 +79,10 @@ export default function Contact() {
               <span>Liên Hệ</span>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-display font-bold">Kết Nối Với Tôi</h2>
-            
+            <h2 className="text-3xl md:text-4xl font-display font-bold">Liên hệ</h2>
+
             <p className="text-slate-400 leading-relaxed font-sans text-sm md:text-base">
-              Bạn đang tìm kiếm một sinh viên CNTT năng động làm đồ án, thực tập sinh backend/full-stack hoặc muốn thảo luận về cờ vua và chạy bộ? Đừng ngần ngại gửi tin nhắn trực tuyến ngay bên cạnh hoặc liên hệ qua các mạng xã hội của tôi!
+              Nếu nhà tuyển dụng đang tìm kiếm 1 lập trình viên full stack thì có thể liên hệ với mình qua số điện thoại và email ở dưới.
             </p>
 
             <div className="pt-6 space-y-4">
@@ -95,14 +95,14 @@ export default function Contact() {
                   <p className="text-sm font-semibold text-white">levokhoinguyen.it@gmail.com</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <div className="p-2.5 bg-slate-900 rounded-lg border border-slate-800 text-slate-300">
                   <Compass className="w-5 h-5 text-blue-400" />
                 </div>
                 <div>
-                  <h4 className="text-xs text-slate-500 font-mono">ĐỊA CHỈ</h4>
-                  <p className="text-sm font-semibold text-white">Đại học Công nghiệp Hà Nội, Hà Nội, Việt Nam</p>
+                  <h4 className="text-xs text-slate-500 font-mono">SỐ ĐIỆN THOẠI</h4>
+                  <p className="text-sm font-semibold text-white">0976104708</p>
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function Contact() {
               </h4>
               <div className="flex items-center gap-3">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/lvkhoinguyen"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 hover:text-emerald-400 text-slate-300 rounded-xl transition-all"
@@ -121,9 +121,9 @@ export default function Contact() {
                 >
                   <Github className="w-5 h-5" />
                 </a>
-                
+
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/l%C3%AA-v%C3%B5-kh%C3%B4i-nguy%C3%AAn-21407a2a5/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-slate-700 hover:text-emerald-400 text-slate-300 rounded-xl transition-all"
@@ -138,7 +138,7 @@ export default function Contact() {
           {/* Right Column: Contact Form */}
           <div className="lg:col-span-7 bg-slate-900/40 border border-slate-850/80 rounded-3xl p-6 md:p-8 backdrop-blur-md shadow-xl">
             <form onSubmit={handleSubmit} className="space-y-5">
-              
+
               {/* Form header */}
               <div className="pb-2 border-b border-slate-900">
                 <h3 className="text-lg font-bold font-display text-white">Gửi lời nhắn trực tuyến</h3>
@@ -150,13 +150,12 @@ export default function Contact() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`p-4 rounded-xl flex items-start gap-3 border ${
-                    status.type === "success"
-                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                      : status.type === "error"
+                  className={`p-4 rounded-xl flex items-start gap-3 border ${status.type === "success"
+                    ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                    : status.type === "error"
                       ? "bg-red-500/10 border-red-500/20 text-red-400"
                       : "bg-slate-800 border-slate-700 text-slate-300"
-                  }`}
+                    }`}
                 >
                   {status.type === "success" ? (
                     <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
@@ -251,6 +250,6 @@ export default function Contact() {
         </div>
 
       </div>
-    </section>
+    </section >
   );
 }

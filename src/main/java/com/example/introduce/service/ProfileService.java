@@ -11,15 +11,17 @@ public class ProfileService {
     @Autowired
     private ProfileRepository profileRepository;
 
-    public Profile getProfileDetail() {
-        return profileRepository.findById(1L).orElseGet(() -> {
-            Profile defaultProfile = new Profile(
-                    1L,
-                    "Lê Võ Khôi Nguyên",
-                    "Backend Developer",
-                    "https://link-to-your-avatar.jpg",
-                    "https://github.com/your-github");
-            return profileRepository.save(defaultProfile);
-        });
+    public synchronized Profile getProfileDetail() {
+        java.util.List<Profile> all = profileRepository.findAll();
+        if (!all.isEmpty()) {
+            return all.get(0);
+        }
+        Profile defaultProfile = new Profile(
+                null,
+                "Lê Võ Khôi Nguyên",
+                "Backend Developer",
+                "/avatar.jpg",
+                "https://github.com/lvkhoinguyen");
+        return profileRepository.save(defaultProfile);
     }
 }
