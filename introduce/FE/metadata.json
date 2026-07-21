@@ -1,0 +1,6 @@
+{
+  "name": "Personal Portfolio",
+  "description": "Trang web portfolio cá nhân của Lê Võ Khôi Nguyên - Sinh viên CNTT HaUI",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
