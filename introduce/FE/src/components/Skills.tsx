@@ -1,114 +1,110 @@
 import { motion } from "motion/react";
-import { Database, Layout, Settings, Cpu, HardDrive, Terminal } from "lucide-react";
+import { Cpu, Database, Layout, Settings } from "lucide-react";
+
+const skillGroups = [
+  {
+    title: "Backend",
+    icon: Database,
+    description: "Kiến trúc dịch vụ, API và dữ liệu.",
+    skills: [
+      { name: "Java", level: 90 },
+      { name: "Spring Boot", level: 85 },
+    ],
+  },
+  {
+    title: "Frontend",
+    icon: Layout,
+    description: "UI rõ ràng, responsive và có chuyển động.",
+    skills: [
+      { name: "React", level: 80 },
+      { name: "Tailwind CSS", level: 90 },
+    ],
+  },
+  {
+    title: "Triển khai",
+    icon: Settings,
+    description: "Đóng gói, đưa lên cloud và vận hành cơ bản.",
+    skills: [
+      { name: "Docker", level: 75 },
+      { name: "Vercel", level: 85 },
+      { name: "Railway", level: 80 },
+    ],
+  },
+];
 
 export default function Skills() {
-  const skillGroups = [
-    {
-      title: "Backend Development",
-      icon: <Database className="w-5 h-5 text-emerald-400" />,
-      description: "Xây dựng kiến trúc dịch vụ, xử lý nghiệp vụ nghiệp cơ sở dữ liệu và bảo mật APIs.",
-      skills: [
-        { name: "Java", level: 90, desc: "Ngôn ngữ cốt lõi, lập trình hướng đối tượng (OOP) vững chắc" },
-        { name: "Spring Boot", level: 85, desc: "Xây dựng RESTful APIs, Spring Security, Data JPA" }
-      ]
-    },
-    {
-      title: "Frontend Integration",
-      icon: <Layout className="w-5 h-5 text-blue-400" />,
-      description: "Thiết kế giao diện người dùng tương tác cao, responsive và tối ưu hóa SEO/Trải nghiệm.",
-      skills: [
-        { name: "React", level: 80, desc: "Xây dựng Single Page Apps, React Hooks, Router" },
-        { name: "Tailwind CSS", level: 90, desc: "Thiết kế giao diện hiện đại, tối ưu hóa CSS Utility classes" }
-      ]
-    },
-    {
-      title: "Deployment & Infrastructure",
-      icon: <Settings className="w-5 h-5 text-purple-400" />,
-      description: "Đóng gói ứng dụng, triển khai tự động hóa hạ tầng đám mây và quản lý mã nguồn.",
-      skills: [
-        { name: "Docker", level: 75, desc: "Đóng gói container hóa ứng dụng độc lập" },
-        { name: "Railway", level: 80, desc: "Triển khai dịch vụ backend và kết nối Database" },
-        { name: "Vercel", level: 85, desc: "Deploy ứng dụng frontend SPA tối ưu hóa CDN" },
-        { name: "Git", level: 85, desc: "Quản lý phiên bản mã nguồn, nhánh và phối hợp nhóm" }
-      ]
-    }
-  ];
-
   return (
-    <section id="skills" className="py-24 bg-slate-900 text-white relative">
-      <div className="container mx-auto px-4 max-w-5xl">
-        
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-400 text-xs font-mono mb-4">
-            <Cpu className="w-3.5 h-3.5" />
-            <span>Năng Lực</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-display font-bold">Kỹ Năng Kỹ Thuật</h2>
-          <p className="text-slate-400 mt-3 font-sans">Các công nghệ tôi sử dụng thành thạo để giải quyết các bài toán lập trình</p>
+    <section id="skills" className="px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 max-w-2xl">
+          <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Kỹ năng</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Những công nghệ mình đang sử dụng nhiều nhất.
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {skillGroups.map((group, gIdx) => (
-            <motion.div
-              key={gIdx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: gIdx * 0.1 }}
-              className="p-6 bg-slate-950/60 backdrop-blur-md border border-slate-800/80 rounded-2xl flex flex-col justify-between hover:border-slate-700 transition-all duration-300"
-            >
-              <div>
-                {/* Header Section */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-slate-900 rounded-lg border border-slate-800">
-                    {group.icon}
+        <div className="grid gap-6 lg:grid-cols-3">
+          {skillGroups.map((group, groupIndex) => {
+            const Icon = group.icon;
+
+            return (
+              <motion.article
+                key={group.title}
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.55, delay: groupIndex * 0.06 }}
+                className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-lg font-bold font-display text-slate-200">
-                    {group.title}
-                  </h3>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white">{group.title}</h3>
+                    <p className="text-sm text-slate-400">{group.description}</p>
+                  </div>
                 </div>
 
-                <p className="text-xs text-slate-400 leading-relaxed mb-6">
-                  {group.description}
-                </p>
-
-                {/* Skills List */}
-                <div className="space-y-4">
-                  {group.skills.map((skill, sIdx) => (
-                    <div key={sIdx} className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-200 font-sans">{skill.name}</span>
-                        <span className="font-mono text-slate-500 font-medium">{skill.level}%</span>
+                <div className="mt-6 space-y-4">
+                  {group.skills.map((skill) => (
+                    <div key={skill.name} className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-200">{skill.name}</span>
+                        <span className="text-slate-500">{skill.level}%</span>
                       </div>
-                      
-                      {/* Skill level indicator bar */}
-                      <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                      <div className="h-2 overflow-hidden rounded-full bg-white/10">
                         <motion.div
                           initial={{ width: 0 }}
                           whileInView={{ width: `${skill.level}%` }}
                           viewport={{ once: true }}
-                          transition={{ duration: 1, delay: 0.1 }}
-                          className="h-full bg-emerald-500 rounded-full"
+                          transition={{ duration: 0.9, ease: "easeOut" }}
+                          className="h-full rounded-full bg-emerald-400"
                         />
                       </div>
-                      <p className="text-[10px] text-slate-500 leading-normal pt-0.5">
-                        {skill.desc}
-                      </p>
                     </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Visual footer marker */}
-              <div className="mt-8 pt-4 border-t border-slate-900 flex items-center justify-between text-[10px] text-slate-500 font-mono">
-                <span>STABLE STACK</span>
-                <span>{group.skills.length} MODULES</span>
-              </div>
-
-            </motion.div>
-          ))}
+              </motion.article>
+            );
+          })}
         </div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.55 }}
+          className="mt-6 rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 backdrop-blur-xl"
+        >
+          <div className="flex items-center gap-3 text-sm uppercase tracking-[0.3em] text-slate-500">
+            <Cpu className="h-4 w-4 text-emerald-400" />
+            Ghi chú
+          </div>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
+            Mình vẫn đang tiếp tục học và cải thiện từng ngày, đặc biệt ở phần kiến trúc backend, tối ưu giao diện và triển khai sản phẩm thực tế.
+          </p>
+        </motion.div>
       </div>
     </section>
   );

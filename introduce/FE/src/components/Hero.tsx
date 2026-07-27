@@ -1,184 +1,174 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { ArrowRight, FileText, Code2, Sparkles, Database, Globe } from "lucide-react";
+import { ArrowRight, FileText, Github, Sparkles } from "lucide-react";
 import axios from "axios";
 
+type Profile = {
+  fullName?: string;
+  role?: string;
+  avatarUrl?: string;
+  githubUrl?: string;
+};
+
+const metrics = [
+  { value: "05+", label: "dự án đã làm" },
+  { value: "Spring", label: "backend sử dụng" },
+  { value: "React", label: "frontend sử dụng" },
+];
+
 export default function Hero() {
-  const [profile, setProfile] = useState<{ fullName: string, role: string, avatarUrl: string, githubUrl: string } | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Gọi API qua Vite Proxy
-    axios.get("/api/profile")
-      .then(response => {
-        setProfile(response.data);
+    let alive = true;
+
+    axios
+      .get("/api/profile")
+      .then((response) => {
+        if (alive) setProfile(response.data);
       })
-      .catch(error => {
-        console.error("Lỗi khi lấy thông tin từ backend:", error);
+      .catch((error) => {
+        console.error("Không lấy được profile từ backend:", error);
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
       });
+
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const scrollToProjects = () => {
-    const projectsSection = document.getElementById("projects");
-    if (projectsSection) {
-      projectsSection.scrollIntoView({ behavior: "smooth" });
-    }
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden bg-radial from-slate-900 via-slate-950 to-black text-white"
+      className="relative overflow-hidden border-b border-white/5 px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pt-12"
     >
-      {/* Dynamic Glowing Blobs for Background Depth */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse delay-700" />
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/5 rounded-full blur-2xl" />
+      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-200"
+          >
+            <Sparkles className="h-4 w-4" />
+            <span>Portfolio cá nhân</span>
+          </motion.div>
 
-      {/* Floating Decorative Tech Tags */}
-      <div className="absolute inset-0 pointer-events-none hidden md:block">
-        <motion.div
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/4 px-4 py-2 bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-2xl flex items-center gap-2 shadow-2xl text-emerald-400"
-        >
-          <Database className="w-4 h-4" />
-          <span className="text-xs font-mono">Spring Boot</span>
-        </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="max-w-3xl text-5xl font-semibold leading-[0.96] tracking-tight text-white sm:text-6xl lg:text-7xl"
+          >
+            {loading ? "Đang tải hồ sơ..." : profile?.fullName || "Lê Võ Khôi Nguyên"}
+          </motion.h1>
 
-        <motion.div
-          animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-1/3 right-1/4 px-4 py-2 bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-2xl flex items-center gap-2 shadow-2xl text-blue-400"
-        >
-          <Code2 className="w-4 h-4" />
-          <span className="text-xs font-mono">React & Tailwind</span>
-        </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.12 }}
+            className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg"
+          >
+            {profile?.role ||
+              "Mình là sinh viên năm cuối ngành Công nghệ thông tin tại HaUI, yêu thích phát triển web full-stack và xây dựng sản phẩm có giao diện rõ ràng, dễ dùng."}
+          </motion.p>
 
-        <motion.div
-          animate={{ y: [0, -12, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-1/3 left-1/3 px-4 py-2 bg-slate-900/60 backdrop-blur-md border border-slate-800 rounded-2xl flex items-center gap-2 shadow-2xl text-indigo-400"
-        >
-          <Globe className="w-4 h-4" />
-          <span className="text-xs font-mono">Docker & Railway</span>
-        </motion.div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-8">
-          
-          {/* Left Column: Text Content */}
-          <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
-            {/* Top Tagline with Animation */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-6 backdrop-blur-sm"
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.18 }}
+            className="mt-8 flex flex-col gap-3 sm:flex-row"
+          >
+            <button
+              onClick={scrollToProjects}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-400 px-6 py-3.5 font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-emerald-300"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>Sẵn sàng cho các thử thách Full-stack</span>
-            </motion.div>
-
-            {/* Main Name / Title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="text-5xl md:text-7xl font-display font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent"
+              Xem dự án
+              <ArrowRight className="h-4 w-4" />
+            </button>
+            <a
+              href="/CV.pdf"
+              download="CV_LeVoKhoiNguyen.pdf"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/5 px-6 py-3.5 font-semibold text-white transition hover:bg-white/10"
             >
-              {profile?.fullName || "Lê Võ Khôi Nguyên"}
-            </motion.h1>
-
-            {/* Secondary Title & Headline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="max-w-2xl text-lg md:text-xl text-slate-400 leading-relaxed font-sans mb-10"
-            >
-              {profile?.role || "Sinh viên tốt nghiệp ngành Khoa học máy tính tại Đại học Công nghiệp Hà Nội (HaUI). Đam mê xây dựng các sản phẩm công nghệ tinh tế, hiệu suất cao."}
-            </motion.p>
-
-            {/* Call to Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
-            >
-              {/* View Projects Button */}
-              <button
-                onClick={scrollToProjects}
-                className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-semibold rounded-xl shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 group cursor-pointer"
-              >
-                <span>Xem Dự Án</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </button>
-
-              {/* Download CV Button */}
+              <FileText className="h-4 w-4" />
+              Tải CV
+            </a>
+            {profile?.githubUrl && (
               <a
-                href="/CV.pdf"
-                download="CV_LeVoKhoiNguyen.pdf"
-                className="w-full sm:w-auto px-8 py-4 bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-medium rounded-xl border border-slate-800 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                href={profile.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/5 px-6 py-3.5 font-semibold text-white transition hover:bg-white/10"
               >
-                <FileText className="w-4 h-4" />
-                <span>Tải CV</span>
+                <Github className="h-4 w-4" />
+                GitHub
               </a>
+            )}
+          </motion.div>
 
-              {/* Github Button */}
-              {profile?.githubUrl && (
-                <a
-                  href={profile.githubUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full sm:w-auto px-8 py-4 bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-medium rounded-xl border border-slate-800 transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Globe className="w-4 h-4" />
-                  <span>GitHub</span>
-                </a>
-              )}
-            </motion.div>
+          <div className="mt-10 grid gap-3 sm:grid-cols-3">
+            {metrics.map((metric, index) => (
+              <motion.div
+                key={metric.label}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 + index * 0.06 }}
+                className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl"
+              >
+                <div className="text-2xl font-semibold text-white">{metric.value}</div>
+                <div className="mt-1 text-sm text-slate-400">{metric.label}</div>
+              </motion.div>
+            ))}
           </div>
+        </div>
 
-          {/* Right Column: Avatar Image */}
-          <div className="flex-1 flex justify-center lg:justify-end w-full max-w-sm lg:max-w-md">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96"
-            >
-              {/* Avatar Glowing Backdrop */}
-              <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
-              
-              {/* Avatar Container with Glassmorphism Border */}
-              <div className="relative w-full h-full rounded-[2rem] overflow-hidden border border-slate-700/50 p-2 bg-slate-900/40 backdrop-blur-md shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500 cursor-pointer group">
-                <img 
-                  src="/avatar.jpg" 
-                  alt="Avatar" 
-                  className="w-full h-full object-cover rounded-[1.5rem] filter contrast-110 group-hover:scale-105 transition-transform duration-500"
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.12 }}
+          className="relative mx-auto w-full max-w-xl"
+        >
+          <div className="absolute inset-0 -z-10 rounded-[2rem] bg-emerald-400/10 blur-3xl" />
+          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+            <div className="grid gap-4 md:grid-cols-[1fr_1.15fr]">
+              <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-slate-900/70">
+                <img
+                  src={profile?.avatarUrl || "/avatar.jpg"}
+                  alt="Ảnh đại diện"
+                  className="h-full w-full object-cover"
                 />
               </div>
 
-              {/* Floating Badge */}
-              <motion.div 
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-4 -left-4 px-4 py-2 bg-slate-900/80 backdrop-blur-lg border border-slate-700 rounded-xl flex items-center gap-2 shadow-xl"
-              >
-                <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-xs font-semibold text-white">Đang tìm việc</span>
-              </motion.div>
-            </motion.div>
+              <div className="flex flex-col justify-between rounded-[1.5rem] border border-white/10 bg-slate-950/70 p-5">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-slate-500">Hiện tại</p>
+                  <h2 className="mt-4 text-2xl font-semibold text-white">Đang tìm cơ hội làm việc chính thức</h2>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">
+                    Mình mong muốn được tham gia môi trường làm việc chuyên nghiệp để phát triển lâu dài về sản phẩm, hệ thống và quy trình triển khai.
+                  </p>
+                </div>
+
+                <div className="mt-6 grid gap-3">
+                  <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+                    Có thể làm việc với Java Spring Boot, React, MySQL và các công cụ triển khai cơ bản như Docker, Vercel, Railway.
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-300">
+                    Mục tiêu của mình là trở thành một kỹ sư phần mềm có nền tảng tốt và tư duy làm sản phẩm lâu dài.
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-
-        </div>
+        </motion.div>
       </div>
-
-      {/* Aesthetic bottom transition wave */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-slate-950 to-transparent pointer-events-none" />
     </section>
   );
 }
-

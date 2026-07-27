@@ -1,93 +1,76 @@
 import { motion } from "motion/react";
-import { GraduationCap, Briefcase, Calendar, Award } from "lucide-react";
+import { Award, Briefcase, GraduationCap } from "lucide-react";
+
+const experiences = [
+  {
+    icon: GraduationCap,
+    title: "Sinh viên năm cuối ngành CNTT",
+    meta: "Đại học Công nghiệp Hà Nội",
+    period: "2022 - hiện tại",
+    description:
+      "Học các nền tảng cốt lõi như cấu trúc dữ liệu, giải thuật, cơ sở dữ liệu và kiến trúc phần mềm. Đồng thời tập trung vào Spring Boot và hệ sinh thái React.",
+  },
+  {
+    icon: Briefcase,
+    title: "Phát triển hệ thống ShoppingWeb",
+    meta: "Đồ án chuyên ngành & thực hành",
+    period: "2025",
+    description:
+      "Thiết kế và triển khai hệ thống thương mại điện tử với API rõ ràng, thanh toán VNPay và chatbot hỗ trợ người dùng.",
+  },
+  {
+    icon: Award,
+    title: "Xây dựng dự án cá nhân & triển khai",
+    meta: "Học hỏi liên tục",
+    period: "Liên tục",
+    description:
+      "Tự nghiên cứu Docker, Railway, Vercel và quy trình triển khai cơ bản để sản phẩm chạy ổn định hơn.",
+  },
+];
 
 export default function Experience() {
-  const experiences = [
-    {
-      type: "education",
-      icon: <GraduationCap className="w-5 h-5 text-emerald-400" />,
-      title: "Sinh viên năm cuối ngành CNTT",
-      institution: "Đại học Công nghiệp Hà Nội (HaUI)",
-      period: "2022 - Hiện tại",
-      description: "Học tập các kiến thức cốt lõi về Khoa học Máy tính, Cấu trúc dữ liệu và Giải thuật, Cơ sở dữ liệu và Kiến trúc phần mềm. Định hướng nghiên cứu chuyên sâu về các framework Java Spring Boot và hệ sinh thái React.",
-      skills: ["Java", "Spring Boot", "SQL", "Software Architecture"]
-    },
-    {
-      type: "project-milestone",
-      icon: <Briefcase className="w-5 h-5 text-blue-400" />,
-      title: "Phát triển hệ thống ShoppingWeb",
-      institution: "Đồ án chuyên ngành & Thực hành",
-      period: "2025",
-      description: "Thiết kế và triển khai toàn diện hệ thống thương mại điện tử từ mô hình cơ sở dữ liệu đến các tính năng nghiệp vụ nâng cao như tích hợp thanh toán ngân hàng qua cổng VNPay và chatbot tự động tư vấn.",
-      skills: ["Java Spring Boot", "VNPay API", "Chatbot", "REST API"]
-    },
-    {
-      type: "personal-development",
-      icon: <Award className="w-5 h-5 text-purple-400" />,
-      title: "Xây dựng các dự án cá nhân & Triển khai",
-      institution: "Học hỏi & Nghiên cứu Công nghệ mới",
-      period: "Liên tục",
-      description: "Tự nghiên cứu các công nghệ hiện đại phục vụ việc phát triển ứng dụng Full-stack. Làm quen với các công cụ triển khai Containerization (Docker), hạ tầng đám mây (Railway, Vercel) để chuẩn hóa quy trình DevOps cơ bản.",
-      skills: ["Docker", "Railway", "Vercel", "Git & CI/CD"]
-    }
-  ];
-
   return (
-    <section id="experience" className="py-24 bg-slate-900 text-white relative">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-400 text-xs font-mono mb-4">
-            <span>Quá Trình</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-display font-bold">Quá trình học tập</h2>
-          <p className="text-slate-400 mt-3 font-sans">Sự kết hợp giữa lý thuyết vững vàng tại HaUI và thực hành thực chiến qua các dự án</p>
+    <section id="experience" className="px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 max-w-2xl">
+          <p className="text-sm uppercase tracking-[0.3em] text-slate-500">Hành trình</p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            Quá trình học tập và làm dự án của mình.
+          </h2>
         </div>
 
-        <div className="relative border-l-2 border-slate-800 ml-4 md:ml-6 space-y-12">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative pl-8 md:pl-10"
-            >
-              {/* Timeline marker with custom icon */}
-              <div className="absolute -left-4 md:-left-5 top-0.5 w-8 h-8 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center shadow-lg z-10">
-                {exp.icon}
-              </div>
+        <div className="relative grid gap-6">
+          <div className="absolute left-6 top-0 hidden h-full w-px bg-gradient-to-b from-emerald-400/70 via-white/10 to-transparent md:block" />
+          {experiences.map((experience, index) => {
+            const Icon = experience.icon;
 
-              {/* Card Container */}
-              <div className="p-6 bg-slate-950/60 backdrop-blur-md border border-slate-800/80 rounded-2xl hover:border-slate-700 transition-colors duration-300">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-white font-display">{exp.title}</h3>
-                    <p className="text-sm text-slate-400 font-sans">{exp.institution}</p>
+            return (
+              <motion.article
+                key={experience.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ duration: 0.55, delay: index * 0.08 }}
+                className="relative rounded-[2rem] border border-white/10 bg-white/5 p-6 pl-6 backdrop-blur-xl md:ml-12 md:p-8"
+              >
+                <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-start gap-4">
+                    <div className="grid h-12 w-12 place-items-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-white">{experience.title}</h3>
+                      <p className="mt-1 text-sm text-slate-400">{experience.meta}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-400 bg-emerald-400/5 px-2.5 py-1 rounded-full border border-emerald-400/10 self-start sm:self-center">
-                    <Calendar className="w-3.5 h-3.5" />
-                    <span>{exp.period}</span>
+                  <div className="inline-flex w-fit rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-xs font-medium text-emerald-200">
+                    {experience.period}
                   </div>
                 </div>
-
-                <p className="text-sm text-slate-400 leading-relaxed font-sans mb-4">
-                  {exp.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {exp.skills.map((skill, sIdx) => (
-                    <span
-                      key={sIdx}
-                      className="text-[11px] font-mono font-medium text-slate-300 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                <p className="max-w-3xl text-sm leading-7 text-slate-300">{experience.description}</p>
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>

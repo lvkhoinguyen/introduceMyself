@@ -1,55 +1,61 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
-import { Menu, X, Code2, Heart, ArrowUp } from "lucide-react";
+import TechBackground from "./components/TechBackground";
+import { ArrowUp, Code2, Heart, Menu, X } from "lucide-react";
+import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 
 export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const { scrollY, scrollYProgress } = useScroll();
+  const topBarScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
-  // Track scrolling to apply glassmorphic styles & active navigation highlights
+  useMotionValueEvent(scrollY, "change", (current) => {
+    setScrolled(current > 24);
+  });
+
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+    const sections = ["hero", "about", "experience", "projects", "skills", "contact"];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
 
-      // Track active section for highlight
-      const sections = ["hero", "about", "experience", "projects", "skills", "contact"];
-      const scrollPosition = window.scrollY + 200;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
-          }
+        if (visible?.target?.id) {
+          setActiveSection(visible.target.id);
         }
-      }
-    };
+      },
+      { rootMargin: "-20% 0px -55% 0px", threshold: [0.2, 0.35, 0.5, 0.65] },
+    );
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    sections.forEach((section) => {
+      const element = document.getElementById(section);
+      if (element) observer.observe(element);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
-  const navItems = [
-    { id: "hero", label: "Trang Chủ" },
-    { id: "about", label: "Về Tôi" },
-    { id: "experience", label: "Quá Trình" },
-    { id: "projects", label: "Dự Án" },
-    { id: "skills", label: "Kỹ Năng" },
-    { id: "contact", label: "Liên Hệ" }
-  ];
+  const navItems = useMemo(
+    () => [
+      { id: "hero", label: "Trang chủ" },
+      { id: "about", label: "Giới thiệu" },
+      { id: "experience", label: "Hành trình" },
+      { id: "projects", label: "Dự án" },
+      { id: "skills", label: "Kỹ năng" },
+      { id: "contact", label: "Liên hệ" },
+    ],
+    [],
+  );
 
   const handleNavClick = (id: string) => {
     setMobileMenuOpen(false);
@@ -60,128 +66,125 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-400">
-      
-      {/* Sticky Glassmorphic Navbar */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "py-4 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 shadow-lg"
-            : "py-6 bg-transparent"
-        }`}
-      >
-        <div className="container mx-auto px-4 max-w-6xl flex items-center justify-between">
-          {/* Logo / Brand */}
-          <button
-            onClick={() => handleNavClick("hero")}
-            className="flex items-center gap-2 text-white font-display font-extrabold text-xl group cursor-pointer"
-          >
-            <div className="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-all">
-              <Code2 className="w-5 h-5" />
-            </div>
-            <span className="tracking-tight">
-              Nguyên<span className="text-emerald-400">.Dev</span>
-            </span>
-          </button>
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.14),_transparent_34%),linear-gradient(180deg,#071114_0%,#05070a_38%,#090d0f_100%)] text-slate-100 selection:bg-emerald-500/30 selection:text-emerald-200">
+      {/* Animated Modern Tech Background */}
+      <TechBackground />
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1.5 bg-slate-900/40 p-1.5 rounded-full border border-slate-900/60 backdrop-blur-sm">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`px-4 py-2 text-xs font-medium rounded-full tracking-wide transition-all cursor-pointer ${
-                  activeSection === item.id
-                    ? "bg-emerald-500 text-slate-950 font-semibold shadow-md shadow-emerald-500/10"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <motion.div
+          className="fixed left-0 top-0 z-50 h-1 w-full origin-left bg-emerald-400"
+          style={{ scaleX: topBarScale }}
+        />
 
-          {/* Call-to-action button in header */}
-          <div className="hidden md:block">
+        <nav
+          className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 ${
+            scrolled ? "py-3" : "py-5"
+          }`}
+        >
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
             <button
-              onClick={() => handleNavClick("contact")}
-              className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-slate-700 text-xs font-semibold rounded-full transition-all cursor-pointer"
+              onClick={() => handleNavClick("hero")}
+              className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 backdrop-blur-xl transition hover:bg-white/10"
             >
-              Cộng Tác Ngay
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-emerald-400 text-slate-950">
+                <Code2 className="h-4 w-4" />
+              </span>
+              <span className="text-sm font-semibold tracking-[0.2em] text-white uppercase">
+                Nguyên.dev
+              </span>
             </button>
-          </div>
 
-          {/* Mobile Menu Trigger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-slate-400 hover:text-white md:hidden cursor-pointer"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-
-        {/* Mobile Navigation Menu Drawer */}
-        {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-slate-950 border-b border-slate-900 p-4 md:hidden shadow-xl">
-            <div className="flex flex-col gap-2">
+            <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1.5 backdrop-blur-xl lg:flex">
               {navItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full py-3 px-4 text-left text-sm rounded-xl transition-all cursor-pointer ${
+                  className={`rounded-full px-4 py-2 text-xs font-medium tracking-wide transition ${
                     activeSection === item.id
-                      ? "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold"
-                      : "text-slate-400 hover:bg-slate-900/60 hover:text-white"
+                      ? "bg-emerald-400 text-slate-950"
+                      : "text-slate-300 hover:text-white"
                   }`}
                 >
                   {item.label}
                 </button>
               ))}
+            </div>
+
+            <div className="hidden lg:block">
               <button
                 onClick={() => handleNavClick("contact")}
-                className="w-full py-3 px-4 mt-2 bg-emerald-500 text-slate-950 font-bold rounded-xl text-center cursor-pointer text-sm"
+                className="rounded-full border border-emerald-400/30 bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-emerald-300"
               >
-                Cộng Tác Ngay
+                Cộng tác ngay
               </button>
             </div>
-          </div>
-        )}
-      </nav>
 
-      {/* Main Sections */}
-      <main>
-        <Hero />
-        <About />
-        <Experience />
-        <Projects />
-        <Skills />
-        <Contact />
-      </main>
-
-      {/* Modern Footer */}
-      <footer className="py-12 border-t border-slate-900 bg-black text-slate-500 text-xs">
-        <div className="container mx-auto px-4 max-w-6xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2 text-slate-400 font-display font-semibold">
-            <Code2 className="w-4 h-4 text-emerald-400" />
-            <span>Lê Võ Khôi Nguyên © {new Date().getFullYear()}</span>
+            <button
+              onClick={() => setMobileMenuOpen((value) => !value)}
+              className="rounded-full border border-white/10 bg-white/5 p-3 text-slate-200 backdrop-blur-xl transition hover:bg-white/10 lg:hidden"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
 
-          <div className="flex items-center gap-1">
-            <span>Thiết kế & phát triển với</span>
-            <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 mx-1" />
-            <span>sử dụng React & Tailwind CSS</span>
-          </div>
+          {mobileMenuOpen && (
+            <div className="mx-4 mt-3 rounded-3xl border border-white/10 bg-slate-950/95 p-3 shadow-2xl shadow-black/40 backdrop-blur-xl lg:hidden">
+              <div className="grid gap-2">
+                {navItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`rounded-2xl px-4 py-3 text-left text-sm transition ${
+                      activeSection === item.id
+                        ? "bg-emerald-400 text-slate-950"
+                        : "bg-white/5 text-slate-200 hover:bg-white/10"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handleNavClick("contact")}
+                  className="rounded-2xl bg-emerald-400 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
+                >
+                  Cộng tác ngay
+                </button>
+              </div>
+            </div>
+          )}
+        </nav>
 
-          <button
-            onClick={() => handleNavClick("hero")}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 cursor-pointer transition-all"
-          >
-            <span>Lên đầu trang</span>
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </footer>
+        <main className="pt-28 sm:pt-32">
+          <Hero />
+          <About />
+          <Experience />
+          <Projects />
+          <Skills />
+          <Contact />
+        </main>
+
+        <footer className="border-t border-white/10 bg-slate-950/70">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-10 text-sm text-slate-400 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-2">
+              <Code2 className="h-4 w-4 text-emerald-400" />
+              <span>Lê Võ Khôi Nguyên © {new Date().getFullYear()}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span>Thiết kế & phát triển với</span>
+              <Heart className="h-3.5 w-3.5 fill-red-500 text-red-500" />
+              <span>React, Motion và Tailwind</span>
+            </div>
+            <button
+              onClick={() => handleNavClick("hero")}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition hover:bg-white/10"
+            >
+              <span>Lên đầu trang</span>
+              <ArrowUp className="h-4 w-4" />
+            </button>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
