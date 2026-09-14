@@ -18,15 +18,25 @@ public class Profile {
     private String avatarUrl;
     private String githubUrl;
 
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "profile_points", joinColumns = @JoinColumn(name = "profile_id"))
+    @Column(name = "point")
+    private java.util.List<String> points = new java.util.ArrayList<>();
+
     public Profile() {
     }
 
-    public Profile(Long id, String fullName, String role, String avatarUrl, String githubUrl) {
+    public Profile(Long id, String fullName, String role, String avatarUrl, String githubUrl, String bio, java.util.List<String> points) {
         this.id = id;
         this.fullName = fullName;
         this.role = role;
         this.avatarUrl = avatarUrl;
         this.githubUrl = githubUrl;
+        this.bio = bio;
+        this.points = points;
     }
 
     // 3. Các hàm Getter và Setter cho từng thuộc tính
@@ -68,5 +78,21 @@ public class Profile {
 
     public void setGithubUrl(String githubUrl) {
         this.githubUrl = githubUrl;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public java.util.List<String> getPoints() {
+        return points;
+    }
+
+    public void setPoints(java.util.List<String> points) {
+        this.points = points;
     }
 }
